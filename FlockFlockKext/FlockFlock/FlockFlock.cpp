@@ -457,6 +457,7 @@ int com_zdziarski_driver_FlockFlock::ff_vnode_check_exec(kauth_cred_t cred, stru
     if (ret == 0) {
         OSString *processPath = OSString::withCString(proc_path);
         char pidString[16];
+        proc_path[MAXPATHLEN-1] = 0;
         
         printf("ff_vnode_check_exec: process path for pid %d is %s\n", pid, proc_path);
 
@@ -495,6 +496,7 @@ int com_zdziarski_driver_FlockFlock::ff_vnode_check_open(kauth_cred_t cred, stru
     
     if (! vn_getpath(vp, target, &buflen))  /* path to target (file) */
         target_len = strlen(target);
+    target[PATH_MAX-1] = 0;
     
     if (userAgentPID == pid) {
         printf("allowing user agent pid access to %s\n", target);

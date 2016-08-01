@@ -1,0 +1,189 @@
+FlockFlock - file access policy enforcement
+by Jonathan Zdziarski 
+
+THE PROBLEM
+One of the worst parts about being compromised is not knowing you're 
+compromised, and having your data stolen by spyware, or hijacked by
+ransomware, only to find out about it too late. Most security researchers 
+aren't even 100% positive that their system hasn't been compromised. 
+Between spyware, ransomware, government hacking, and other threats, simply
+relying on file permissions and a secure execution environment on longer
+cuts it. There's a much needed solution for a tool that can keep your
+personal data protected from potentially malicious software that has
+rotted your system.
+
+WHAT IS FLOCKFLOCK?
+
+In Simple Terms:
+
+FlockFlock is a utility to help protect your personal files in OS X,
+to be able to tell if your system has been compromised, and to defend
+your personal data against randsomware, spyware, infection, and other 
+threats by preventing unauthorized processes (even by super user processes)
+from being able to open and read your files without your explicit 
+permission.
+
+In short, FlockFlock is like the popular "Little Snitch" program, but for
+file access instead of network connections. It integrates with the
+operating system on a low level, and has capabilities higher than root.
+
+For Developers:
+
+FlockFlock is a programmable OS X kernel extension that enforces file access
+policy using OS X's kernel-level MAC (mandatory access control) framework.
+The MAC framework began in TrustedBSD and was later adopted into the
+Darwin kernel; it allows FlockFlock to intercept every file open call on
+the system and analyze it against a set of rules programmed into the kernel
+at login time. Even if an attacker gets root on your system and kills off
+the helper daemon, the kernel module will continue to enforce the user's
+rules (and also attempt to defend FlockFlock from being unloaded or
+deleted).
+
+FlockFlock comes in two pieces: the kernel extension, which contains a live
+copy of all active rules (so that a rooted device should not be able to
+disable it), and a user space client, which runs when the user logs in to
+program the kernel module, prompt the user for unauthorized file access
+attempts, and add new rules to the user's ~/.flockflockrc file.
+
+FlockFlock is also open source, because there is such a lack of good
+driver and kernel code for Mac. I think you'll find FlockFlock to be
+very useful in developing your own kernel-mode drivers. FlockFlock is an
+IOKit based driver, and the source code should help you understand
+complex concepts such as mach messages, user-space client communication,
+driver contruction, memory and locking, and much more. Enjoy the knowledge!
+
+WHY THE STUPID NAME?
+
+It's a play on words with the old unix "flock" style advisory locking
+combined with a hat tip to Patrick Wardle, author of BlockBlock, which
+is a different type of system integrity protection tool you should also
+be using.
+
+NOTE: FlockFlock's locking is much more advanced than the flocks of olde,
+    it's just a play on words, and does not rely on (or use) flocks.
+
+FEATURES
+
+- Real-time, kernel-level protection against unauthorized access to files
+- Defend against randomware, spyware or other malicious programs that
+  might attempt to steal or encrypt your personal
+- A user-friendly interface to add new rules and receive notifications of
+  unauthorized access attempts.
+- Self-defending; must be uninstalled from recovery mode. Protects
+  against root processes from unloading the kernel extension or
+  deleting or moving any core files.
+
+INSTALLATION
+
+Until Apple provides me with kext a kext signing certificate, you will
+have to /temporarily/ disable SIP in order to install or uninstall 
+FlockFlock. Once installed, you can immediately turn it back on.
+
+1. Reboot your computer into "Recovery Mode" by rebooting and holding in
+   Command-R after the chime, until it boots to the recovery partition.
+   Start a Terminal (Utilities->Terminal) and type:
+
+	csrutil disable; reboot
+
+2. When your system reboots, double click the FlockFlock.pkg file and 
+   follow the installation process.
+
+3. After installation is complete, reboot back into recovery mode to
+   re-enable SIP, by typing: csruril enable; reboot
+
+FIRST USE
+
+When the system comes back up, FlockFlock should be active on your
+system, and you should start being prompted to grant file access
+permissions to various programs you might run.
+
+When first running your favorite applications for the first time,
+you'll be prompted to allow or deny access to specific files or folders.
+This allows you to set up initial access rules. FlockFlock will remember
+your choices so it won't bother you again, unless you check the box
+"Forget after Restart".
+
+RULES EDITING
+
+To help make FlockFlock robust against attacks, rules editing is not
+currently possible except from recovery mode.
+
+1. Boot into recovery mode
+2. Open a terminal
+3. You may either edit or delete the .flockflockrc file in your home
+   directory. If you delete it, it will be replaced with the defaults.c
+4. Reboot back into the OS
+
+REMOVAL / IF SOMETHING GOES WRONG
+
+In the event you don't like FlockFlock, or something has tampered with it, 
+causing issues with your system, you can remove it only one way:
+
+To delete FlockFlock, you'll also need to boot into recovery mode. This
+is because FlockFlock defends itself against deletion or other attempts
+to remove it. Launch a terminal in recovery mode, then run the following
+commands:
+
+NOTE: "Macintosh HD" may be mounted somewhere else on your system
+
+cd "/Volumes/Machintosh HD"
+rm -rf ./Library/Extensions/FlockFlock.kext
+rm -rf ./Library/Application\ Support/FlockFlock
+rm -f ./Library/LaunchDaemons/com.zdziarski.FlockFlock.plist
+rm -f ./Users/<your username>/Library/LaunchAgents/com.zdziarski.FlockFlockUserAgent.plist
+rm -f ./Users/<your username>/.flockflockrc
+reboot
+
+When the system comes back up, FlockFlock should be gone.
+
+SELF DEFENSE
+
+The module prevents deletion of core files. Any attempt to unload the
+kernel extension, except through recovery mode, will cause a kernel
+panic and subsequent reboot. These are designed to protect your data,
+not make things convenient.
+
+COMPATIBILITY
+
+- Requires a minimum of OS X El Capitan
+
+  NOTE: THIS SOFTWARE IS ALPHA SOFTWARE AND MAY HAVE SEVERE BUGS
+
+KNOWN BUGS
+
+- None (this list is expected to grow)
+
+FUTURE PLANS
+- Implement a rules editing tool in user-space and give it exclusive
+  editing capabilities (to avoid having to boot into recovery mode)
+- Implement temporary rules that expire when the process exits
+- Implement one-time access (in addition to "Forget on Restart")
+- Implement activity logging
+- Richer popup screen to support more configurations
+
+FAQ
+
+- What does this protect?
+  The default ruleset protects files in /Users only, although this can
+  be changed. If FlockFlock tried to block on every file acccess in the
+  system, everything would come to a screeching halt. 
+
+- Does this impact performance?
+  When an application attempts to access a protected file, FlockFlock
+  performs a policy lookup. The lookup is generally fast, and should not
+  impact performance except possibly on extremely busy systems that are
+  opening a lot of files in the background.
+
+- Where performance is impacted is the quarantine during a user prompt.
+  If FlockFlock decides the user must approve the file access, then the
+  program is blocked on the file access until the user responds. This, 
+  obviously, is the behavior you want, but if you let the prompt sit there
+  forever, you'll end up getting a backlog of prompts to answer, which can
+  become a bottleneck for you. It could possibly also make some programs
+  malfunction, such as those that are waiting for a file to open and let
+  a network connection time out due to being blocked.
+
+ACKNOWLEDGMENTS
+Thanks to Patrick Wardle for providing some initial code to peruse on the
+MAC framework and his blog posts on pid task tracking.
+

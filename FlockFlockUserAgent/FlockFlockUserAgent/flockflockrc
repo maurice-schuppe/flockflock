@@ -1,0 +1,57 @@
+; .flockflockrc 
+; configuration file for file access policy
+;
+; format:
+;     policy_class policy_type path_component process_name temporary_pid
+;
+; syntax: 
+;     policy_class
+;         allow    allow any read operations matching this policy
+;         allow!   allow any read operations not matching this policy
+;         deny     deny any read operations matching this policy
+;         deny!    deny any read operations not matching this policy
+;
+;     policy_type
+;         prefix    policy applies to file/dirs matching prefix 
+;             useful for things like SQLite databases with multiple files
+;             can also use for directory prefixing
+;         path      policy applies to file at direct path_component
+;             use a slash at the end to indicate a directory prefix
+;             using 'path', nested directories don't apply to the rule.
+;             to apply nested directories also, use "prefix"
+;         suffux    policy applies to file suffix path_component
+;             can be used for extensions or folders in home directories
+; 
+;     path_component
+;         the path component intended to match policy_type
+;         must be encapsulates in quotes to accommodate spaces
+;
+;     process_name
+;         policy applies to all processes matching process_name
+;         must be encapsulated in quotes to accommodate spaces
+;         use "any" to apply to all processes
+;         use a slash at the end to indicate a path
+;
+;     temporary_pid
+;         policy applies to the specific pid supplies
+;         use "no" to indicate this is not a temporary policy
+
+; allow access to any files outside of /Users
+allow! prefix "/Users/" "any" no
+
+; allow preferences files to be read
+allow suffix ".plist" "any" no
+allow suffix ".bundle" "any" no
+
+; trust all system components (same mechanism protects this area with sip)
+allow path "any" "/System/Library/" no
+allow path "any" "/usr/libexec/" no
+allow path "any" "/usr/sbin/" no
+allow path "any" "/usr/bin/" no
+
+; let unix processes read certain files
+allow suffix "/.profile" "/bin/bash" no
+allow suffix "/.bash_history" "/bin/bash" no
+allow suffix "/.CFUserTextEncoding" "any" no
+
+; user-defined rules will be added here

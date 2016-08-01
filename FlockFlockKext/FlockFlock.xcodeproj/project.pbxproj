@@ -1,0 +1,294 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		700BE6CE1D4BB53C004F20D3 /* FlockFlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 700BE6CC1D4BB53C004F20D3 /* FlockFlock.cpp */; };
+		700BE6CF1D4BB53C004F20D3 /* FlockFlock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 700BE6CD1D4BB53C004F20D3 /* FlockFlock.hpp */; };
+		700BE6D21D4BB799004F20D3 /* FlockFlockClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 700BE6D01D4BB799004F20D3 /* FlockFlockClient.cpp */; };
+		700BE6D31D4BB799004F20D3 /* FlockFlockClient.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 700BE6D11D4BB799004F20D3 /* FlockFlockClient.hpp */; };
+		7068B77D1D4F9130006511E1 /* mac_policy_hooks.c in Sources */ = {isa = PBXBuildFile; fileRef = 7068B77C1D4F9130006511E1 /* mac_policy_hooks.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		700BE6BF1D4BB455004F20D3 /* FlockFlock.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlockFlock.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		700BE6C61D4BB455004F20D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		700BE6CC1D4BB53C004F20D3 /* FlockFlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlockFlock.cpp; sourceTree = SOURCE_ROOT; };
+		700BE6CD1D4BB53C004F20D3 /* FlockFlock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlockFlock.hpp; sourceTree = SOURCE_ROOT; };
+		700BE6D01D4BB799004F20D3 /* FlockFlockClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlockFlockClient.cpp; sourceTree = "<group>"; };
+		700BE6D11D4BB799004F20D3 /* FlockFlockClient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlockFlockClient.hpp; sourceTree = "<group>"; };
+		700BE6EB1D4BDF22004F20D3 /* FlockFlockClientShared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlockFlockClientShared.h; sourceTree = "<group>"; };
+		7068B77C1D4F9130006511E1 /* mac_policy_hooks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mac_policy_hooks.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		700BE6BB1D4BB455004F20D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		700BE6B51D4BB455004F20D3 = {
+			isa = PBXGroup;
+			children = (
+				700BE6C11D4BB455004F20D3 /* FlockFlock */,
+				700BE6C01D4BB455004F20D3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		700BE6C01D4BB455004F20D3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				700BE6BF1D4BB455004F20D3 /* FlockFlock.kext */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		700BE6C11D4BB455004F20D3 /* FlockFlock */ = {
+			isa = PBXGroup;
+			children = (
+				7068B77C1D4F9130006511E1 /* mac_policy_hooks.c */,
+				700BE6CD1D4BB53C004F20D3 /* FlockFlock.hpp */,
+				700BE6CC1D4BB53C004F20D3 /* FlockFlock.cpp */,
+				700BE6D11D4BB799004F20D3 /* FlockFlockClient.hpp */,
+				700BE6D01D4BB799004F20D3 /* FlockFlockClient.cpp */,
+				700BE6EB1D4BDF22004F20D3 /* FlockFlockClientShared.h */,
+				700BE6C61D4BB455004F20D3 /* Info.plist */,
+			);
+			path = FlockFlock;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		700BE6BC1D4BB455004F20D3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				700BE6CF1D4BB53C004F20D3 /* FlockFlock.hpp in Headers */,
+				700BE6D31D4BB799004F20D3 /* FlockFlockClient.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		700BE6BE1D4BB455004F20D3 /* FlockFlock */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 700BE6C91D4BB455004F20D3 /* Build configuration list for PBXNativeTarget "FlockFlock" */;
+			buildPhases = (
+				700BE6BA1D4BB455004F20D3 /* Sources */,
+				700BE6BB1D4BB455004F20D3 /* Frameworks */,
+				700BE6BC1D4BB455004F20D3 /* Headers */,
+				700BE6BD1D4BB455004F20D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlockFlock;
+			productName = FlockFlock;
+			productReference = 700BE6BF1D4BB455004F20D3 /* FlockFlock.kext */;
+			productType = "com.apple.product-type.kernel-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		700BE6B61D4BB455004F20D3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Jonathan Zdziarski";
+				TargetAttributes = {
+					700BE6BE1D4BB455004F20D3 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = 700BE6B91D4BB455004F20D3 /* Build configuration list for PBXProject "FlockFlock" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 700BE6B51D4BB455004F20D3;
+			productRefGroup = 700BE6C01D4BB455004F20D3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				700BE6BE1D4BB455004F20D3 /* FlockFlock */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		700BE6BD1D4BB455004F20D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		700BE6BA1D4BB455004F20D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				700BE6D21D4BB799004F20D3 /* FlockFlockClient.cpp in Sources */,
+				700BE6CE1D4BB53C004F20D3 /* FlockFlock.cpp in Sources */,
+				7068B77D1D4F9130006511E1 /* mac_policy_hooks.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		700BE6C71D4BB455004F20D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.10;
+			};
+			name = Debug;
+		};
+		700BE6C81D4BB455004F20D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx10.10;
+			};
+			name = Release;
+		};
+		700BE6CA1D4BB455004F20D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0d1;
+				INFOPLIST_FILE = FlockFlock/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULE_NAME = com.zdziarski.FlockFlock;
+				MODULE_VERSION = 1.0.0d1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zdziarski.FlockFlock;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.10;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Debug;
+		};
+		700BE6CB1D4BB455004F20D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0d1;
+				INFOPLIST_FILE = FlockFlock/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULE_NAME = com.zdziarski.FlockFlock;
+				MODULE_VERSION = 1.0.0d1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zdziarski.FlockFlock;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.10;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		700BE6B91D4BB455004F20D3 /* Build configuration list for PBXProject "FlockFlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				700BE6C71D4BB455004F20D3 /* Debug */,
+				700BE6C81D4BB455004F20D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		700BE6C91D4BB455004F20D3 /* Build configuration list for PBXNativeTarget "FlockFlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				700BE6CA1D4BB455004F20D3 /* Debug */,
+				700BE6CB1D4BB455004F20D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 700BE6B61D4BB455004F20D3 /* Project object */;
+}

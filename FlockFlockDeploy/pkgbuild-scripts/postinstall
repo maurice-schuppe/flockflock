@@ -1,0 +1,9 @@
+#!/bin/sh
+
+mkdir -p "~/Library/LaunchAgents"
+cp "/Library/Application Support/FlockFlock/com.zdziarski.FlockFlockUserAgent.plist" ~/Library/LaunchAgents/
+kextload /Library/Extensions/FlockFlock.kext
+sleep 5
+
+CONSOLE_USER=$(ps aux | grep console | grep -v grep | cut -d' ' -f1)
+sudo -u $CONSOLE_USER launchctl load ~/Library/LaunchAgents/com.zdziarski.FlockFlockUserAgent.plist

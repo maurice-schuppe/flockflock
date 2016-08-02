@@ -131,7 +131,6 @@ bool com_zdziarski_driver_FlockFlockClient::start(IOService *provider)
 IOReturn com_zdziarski_driver_FlockFlockClient::clientClose(void)
 {
     printf("FlockFlockClient::clientClose client close\n");
-    // m_driver->stopFilter();
     m_driver->clearMachPort();
     terminate();
     return kIOReturnSuccess;

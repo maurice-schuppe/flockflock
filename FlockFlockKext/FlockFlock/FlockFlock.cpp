@@ -187,12 +187,12 @@ bool com_zdziarski_driver_FlockFlock::startProcessMonitor()
     execHandle = { 0 };
     execOps = {
         .mpo_vnode_check_exec   = _ff_vnode_check_exec_internal,
-        .mpo_vnode_check_unlink = _ff_vnode_check_unlink_internal,
+//        .mpo_vnode_check_unlink = _ff_vnode_check_unlink_internal,
 //        .mpo_vnode_check_write  = _ff_vnode_check_write_internal,
-        .mpo_vnode_check_setmode = _ff_vnode_check_setmode_internal,
-        .mpo_vnode_check_setowner = _ff_vnode_check_setowner_internal,
+//        .mpo_vnode_check_setmode = _ff_vnode_check_setmode_internal,
+//        .mpo_vnode_check_setowner = _ff_vnode_check_setowner_internal,
 //        .mpo_vnode_check_truncate    = _ff_vnode_check_truncate_internal,
-        .mpo_vnode_check_rename_from = _ff_vnode_check_rename_from_internal
+//        .mpo_vnode_check_rename_from = _ff_vnode_check_rename_from_internal
     };
     execConf = {
         .mpc_name            = "FF Process Monitor and Defenses",
@@ -246,7 +246,7 @@ bool com_zdziarski_driver_FlockFlock::startFilter()
             .mpc_labelnames      = NULL,
             .mpc_labelname_count = 0,
             .mpc_ops             = &policyOps,
-            .mpc_loadtime_flags  = 0, /* disable MPC_LOADTIME_FLAG_UNLOADOK to prevent unloading 
+            .mpc_loadtime_flags  = MPC_LOADTIME_FLAG_UNLOADOK, /* disable MPC_LOADTIME_FLAG_UNLOADOK to prevent unloading
                                        *
                                        * NOTE: setting this to 0 CAUSES A KERNEL PANIC AND REBOOT if the module is
                                        *     unloaded. This is how we defend against malware unloading it. */
@@ -378,8 +378,8 @@ bool com_zdziarski_driver_FlockFlock::receivePolicyResponse(struct policy_respon
     bool success = false;
     bool lock = IOLockTryLock(context->reply_lock);
     
-    while(lock == false && shouldStop == false) {
-        IOSleep(1000);
+    while(lock == false && shouldStop == false && notificationPort != MACH_PORT_NULL) {
+        IOSleep(100);
         lock = IOLockTryLock(context->reply_lock);
     }
     
@@ -402,7 +402,7 @@ bool com_zdziarski_driver_FlockFlock::receivePolicyResponse(struct policy_respon
     return true;
 }
 
-int com_zdziarski_driver_FlockFlock::sendPolicyQuery(struct policy_query *query, struct mach_query_context *context) {
+int com_zdziarski_driver_FlockFlock::sendPolicyQuery(struct policy_query *query, struct mach_query_context *context, bool lock) {
     int ret;
     
     context->message.header.msgh_remote_port = notificationPort;
@@ -414,9 +414,10 @@ int com_zdziarski_driver_FlockFlock::sendPolicyQuery(struct policy_query *query,
     query->security_token = random();
     bcopy(query, &context->message.query, sizeof(struct policy_query));
     
-    IOLockLock(context->policy_lock);
-    IOLockLock(context->reply_lock);
-    
+    if (lock == true) {
+        IOLockLock(context->policy_lock);
+        IOLockLock(context->reply_lock);
+    }
     ret = mach_msg_send_from_kernel(&context->message.header, sizeof(context->message));
     if (ret) {
         IOLockUnlock(context->policy_lock);
@@ -455,9 +456,21 @@ int com_zdziarski_driver_FlockFlock::ff_vnode_check_exec(kauth_cred_t cred, stru
     }
     
     if (ret == 0) {
-        OSString *processPath = OSString::withCString(proc_path);
-        char pidString[16];
+        OSString *processPath;
         proc_path[MAXPATHLEN-1] = 0;
+        proc_len = (int)strlen(proc_path);
+        
+        /* Shorten applications down to their .app package */
+        if (!strncmp(proc_path, "/Applications/", 14)) {
+            char *ptr = proc_path + 14;
+            while(ptr < (proc_path + proc_len)-4 && strncasecmp(ptr, ".app/", 4))
+                { ptr++; }
+            if (ptr < (proc_path + proc_len)-4)
+                ptr[5] = 0;
+        }
+        
+        processPath = OSString::withCString(proc_path);
+        char pidString[16];
         
         printf("ff_vnode_check_exec: process path for pid %d is %s\n", pid, proc_path);
 
@@ -476,17 +489,15 @@ int com_zdziarski_driver_FlockFlock::ff_vnode_check_open_static(OSObject *provid
     return me->ff_vnode_check_open(cred, vp, label, acc_mode);
 }
 
-int com_zdziarski_driver_FlockFlock::ff_vnode_check_open(kauth_cred_t cred, struct vnode *vp, struct label *label, int acc_mode)
+int com_zdziarski_driver_FlockFlock::ff_evaluate_vnode_check_open(kauth_cred_t cred, struct vnode *vp, struct label *label, int acc_mode, struct policy_query *query)
 {
     bool blacklisted = false, whitelisted = false;
-    struct policy_response response;
     char target[PATH_MAX];
     char proc_path[PATH_MAX];
     size_t target_len = 0, proc_len = 0;
     int buflen = PATH_MAX;
     int pid = proc_selfpid();
     char pidString[16];
-    int ret = EACCES;
     OSString *processPath;
     
     if (vp == NULL)         /* something happened */
@@ -593,20 +604,45 @@ int com_zdziarski_driver_FlockFlock::ff_vnode_check_open(kauth_cred_t cred, stru
         rule = rule->next;
     }
     
-    if (whitelisted == true) {
-        ret = 0;
-        //printf("FlockFlock::ff_vnode_check_open: allow open of %s by pid %d (%s) wht %d blk %d\n", target, pid, proc_path, whitelisted, blacklisted);
-    } else if (blacklisted == true) {
+    if (whitelisted == true)
+        return 0;
+    if (blacklisted == true) {
         printf("FlockFlock::ff_vnode_check_open: deny open of %s by pid %d (%s) wht %d blk %d\n", target, pid, proc_path, whitelisted, blacklisted);
-    } else { /* ask user */
-        struct policy_query query;
-        query.pid = pid;
-        query.query_type = FFQ_ACCESS;
-        bcopy(target, query.path, target_len+1);
+
+        return EACCES;
+    }
+    
+    printf("FlockFlock::ff_vnode_check_open: ask open of %s by pid %d (%s) wht %d blk %d\n", target, pid, proc_path, whitelisted, blacklisted);
+
+    query->pid = pid;
+    query->query_type = FFQ_ACCESS;
+    bcopy(target, query->path, target_len+1);
+    bcopy(proc_path, query->process_name, proc_len+1);
+    
+    return EAUTH;
+}
+
+int com_zdziarski_driver_FlockFlock::ff_vnode_check_open(kauth_cred_t cred, struct vnode *vp, struct label *label, int acc_mode)
+{
+    struct policy_query query;
+    struct policy_response response;
+    int ret = ff_evaluate_vnode_check_open(cred, vp, label, acc_mode, &query);
+
+    if (ret == EAUTH) {
         
-        printf("FlockFlock::ff_vnode_check_open: ask open of %s by pid %d (%s) wht %d blk %d\n", target, pid, proc_path, whitelisted, blacklisted);
+        IOLockLock(policyContext.policy_lock);
+        IOLockLock(policyContext.reply_lock);
         
-        if (sendPolicyQuery(&query, &policyContext) == 0) {
+        /* re-evaluate in case the rule was just added */
+        int ret2 = ff_evaluate_vnode_check_open(cred, vp, label, acc_mode, &query);
+        if (ret2 != EAUTH) {
+            IOLockUnlock(policyContext.policy_lock);
+            IOLockUnlock(policyContext.reply_lock);
+            return ret2;
+        }
+        
+        /* sent the query, wait for response */
+        if (sendPolicyQuery(&query, &policyContext, false) == 0) {
             printf("FlockFlock::ff_node_check_option: sent policy query successfully, waiting for reply\n");
             bool success = receivePolicyResponse(&response, &policyContext);
             if (success) {
@@ -614,6 +650,7 @@ int com_zdziarski_driver_FlockFlock::ff_vnode_check_open(kauth_cred_t cred, stru
             }
         } else {
             printf("FlockFlock::ff_vnode_check_open: user agent is unavailable to prompt user, denying access\n");
+            ret = EACCES;
         }
     }
     

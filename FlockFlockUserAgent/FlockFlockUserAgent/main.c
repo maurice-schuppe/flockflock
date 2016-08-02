@@ -141,6 +141,12 @@ int send_configuration(io_connect_t connection)
             rule.temporaryRule = 1;
         }
         
+        printf("class: %d\n", get_class_by_name(class));
+        printf("type : %d\n", get_type_by_name(type));
+        printf("path : %s\n", rule.rulePath);
+        printf("proc : %s (%d)\n", rule.processName, (int)strlen(rule.processName));
+        printf("temp : %d\n", rule.temporaryRule);
+        
         kern_return_t kr = IOConnectCallMethod(connection, kFlockFlockRequestAddClientRule, NULL, 0, &rule, sizeof(rule), NULL, NULL, NULL, NULL);
         if (kr == KERN_SUCCESS) {
             printf("\tsuccess\n");
@@ -223,7 +229,7 @@ int prompt_user_response(struct policy_query *query)
     CFStringRef alert_str, param;
     CFUserNotificationRef notification;
     CFDictionaryRef parameters;
-    CFMutableArrayRef popup_options;
+    CFMutableArrayRef popup_options, radio_options;
     CFOptionFlags responseFlags = 0;
     unsigned long selectedIndex;
     CFStringRef selectedElement;
@@ -231,7 +237,8 @@ int prompt_user_response(struct policy_query *query)
     char *path, *extension, *ptr, option[PATH_MAX];
     int i;
     
-    proc_pidpath(query->pid, proc_path, PATH_MAX);
+
+    strncpy(proc_path, query->process_name, PATH_MAX-1);
     proc_pidpath(ppid, pproc_path, PATH_MAX);
     
     snprintf(alert_message, sizeof(alert_message), "FlockFlock detected an access attempt to the file '%s'\n\nApplication:\n%s (%d)\n\nParent:\n%s (%d)\n",
@@ -283,6 +290,11 @@ int prompt_user_response(struct policy_query *query)
     free(path);
     
     /* construct the popup */
+    radio_options = CFArrayCreateMutable(NULL, 0, NULL);
+    CFArrayAppendValue(radio_options, CFSTR("Once"));
+    CFArrayAppendValue(radio_options, CFSTR("Until Restart"));
+    CFArrayAppendValue(radio_options, CFSTR("Forever"));
+    
     const void* keys[] = {
         kCFUserNotificationAlertHeaderKey,
         kCFUserNotificationAlertMessageKey,
@@ -299,13 +311,13 @@ int prompt_user_response(struct policy_query *query)
         CFSTR("Allow"),
         CFSTR("Deny"),
         popup_options,
-        CFSTR("Forget After Restart"),
+        radio_options,
         icon
     };
     
     /* display the popup to the user and get a response */
     parameters = CFDictionaryCreate(0, keys, values, sizeof(keys)/sizeof(*keys), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    notification = CFUserNotificationCreate(kCFAllocatorDefault, 60, kCFUserNotificationPlainAlertLevel | CFUserNotificationPopUpSelection((extension == NULL) ? 0 : 1), &err, parameters);
+    notification = CFUserNotificationCreate(kCFAllocatorDefault, 60, kCFUserNotificationPlainAlertLevel | CFUserNotificationPopUpSelection((extension == NULL) ? 0 : 1) | kCFUserNotificationUseRadioButtonsFlag | CFUserNotificationCheckBoxChecked(2), &err, parameters);
     response = CFUserNotificationReceiveResponse(notification, 60, &responseFlags);
     
     if (response != 0) {
@@ -355,15 +367,23 @@ int prompt_user_response(struct policy_query *query)
     
     CFRelease(parameters);
     CFRelease(popup_options);
-
+    CFRelease(radio_options);
+    
     /* add new rule to driver */
-    IOConnectCallMethod(driverConnection, kFlockFlockRequestAddClientRule, NULL, 0, &rule, sizeof(rule), NULL, NULL, NULL, NULL);
-    
-    if (!(responseFlags & CFUserNotificationCheckBoxChecked(0))) {
-        printf("writing new rule to .flockflockrc\n");
-        write_new_rule(&rule);
+    if (responseFlags & CFUserNotificationCheckBoxChecked(1) || responseFlags & CFUserNotificationCheckBoxChecked(2))
+    {
+        int kr = IOConnectCallMethod(driverConnection, kFlockFlockRequestAddClientRule, NULL, 0, &rule, sizeof(rule), NULL, NULL, NULL, NULL);
+        if (kr == 0) {
+            printf("new rule added successfully\n");
+        } else {
+            printf("error occured while adding new rule: %d\n", kr);
+        }
+        
+        if (responseFlags & CFUserNotificationCheckBoxChecked(2)) {
+            printf("writing new rule to .flockflockrc\n");
+            write_new_rule(&rule);
+        }
     }
-    
     if (rule.ruleClass == kFlockFlockPolicyClassWhitelistAllMatching)
         return 0;
     

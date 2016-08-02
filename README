@@ -124,6 +124,9 @@ is because FlockFlock defends itself against deletion or other attempts
 to remove it. Launch a terminal in recovery mode, then run the following
 commands:
 
+NOTE: ALPHA VERSIONS HAVE PERSISTENCE TURNED OFF, SO YOU WONT NEED
+      RECOVERY MODE TO DELETE THE APP
+
 NOTE: "Macintosh HD" may be mounted somewhere else on your system
 
 cd "/Volumes/Machintosh HD"
@@ -187,3 +190,14 @@ ACKNOWLEDGMENTS
 Thanks to Patrick Wardle for providing some initial code to peruse on the
 MAC framework and his blog posts on pid task tracking.
 
+CHANGELOG
+
+0.0.1	Initial alpha release
+0.0.2   Temporarily disable persistence mechanisms for alpha testing
+        Break lock if driver disconnects
+        Truncated /Application apps to their .app container
+        Resolved issued with duplicate queries
+        Reduced the sleep time between waiting for policy lock
+        Re-checked policy list before sending blocked queries
+0.0.3   Added radio buttons for choosing "Once", "Until Restart",
+        and "Forever"

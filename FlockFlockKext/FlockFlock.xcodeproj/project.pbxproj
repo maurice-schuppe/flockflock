@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		700BE6CE1D4BB53C004F20D3 /* FlockFlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 700BE6CC1D4BB53C004F20D3 /* FlockFlock.cpp */; };
-		700BE6CF1D4BB53C004F20D3 /* FlockFlock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 700BE6CD1D4BB53C004F20D3 /* FlockFlock.hpp */; };
 		700BE6D21D4BB799004F20D3 /* FlockFlockClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 700BE6D01D4BB799004F20D3 /* FlockFlockClient.cpp */; };
 		700BE6D31D4BB799004F20D3 /* FlockFlockClient.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 700BE6D11D4BB799004F20D3 /* FlockFlockClient.hpp */; };
+		706853A01D500E530097A293 /* FlockFlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7068539E1D500E530097A293 /* FlockFlock.cpp */; };
+		706853A11D500E530097A293 /* FlockFlock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7068539F1D500E530097A293 /* FlockFlock.hpp */; };
 		7068B77D1D4F9130006511E1 /* mac_policy_hooks.c in Sources */ = {isa = PBXBuildFile; fileRef = 7068B77C1D4F9130006511E1 /* mac_policy_hooks.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		700BE6BF1D4BB455004F20D3 /* FlockFlock.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlockFlock.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		700BE6C61D4BB455004F20D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		700BE6CC1D4BB53C004F20D3 /* FlockFlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlockFlock.cpp; sourceTree = SOURCE_ROOT; };
-		700BE6CD1D4BB53C004F20D3 /* FlockFlock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlockFlock.hpp; sourceTree = SOURCE_ROOT; };
 		700BE6D01D4BB799004F20D3 /* FlockFlockClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlockFlockClient.cpp; sourceTree = "<group>"; };
 		700BE6D11D4BB799004F20D3 /* FlockFlockClient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlockFlockClient.hpp; sourceTree = "<group>"; };
 		700BE6EB1D4BDF22004F20D3 /* FlockFlockClientShared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlockFlockClientShared.h; sourceTree = "<group>"; };
+		7068539E1D500E530097A293 /* FlockFlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlockFlock.cpp; sourceTree = "<group>"; };
+		7068539F1D500E530097A293 /* FlockFlock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlockFlock.hpp; sourceTree = "<group>"; };
 		7068B77C1D4F9130006511E1 /* mac_policy_hooks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mac_policy_hooks.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -56,8 +56,8 @@
 			isa = PBXGroup;
 			children = (
 				7068B77C1D4F9130006511E1 /* mac_policy_hooks.c */,
-				700BE6CD1D4BB53C004F20D3 /* FlockFlock.hpp */,
-				700BE6CC1D4BB53C004F20D3 /* FlockFlock.cpp */,
+				7068539F1D500E530097A293 /* FlockFlock.hpp */,
+				7068539E1D500E530097A293 /* FlockFlock.cpp */,
 				700BE6D11D4BB799004F20D3 /* FlockFlockClient.hpp */,
 				700BE6D01D4BB799004F20D3 /* FlockFlockClient.cpp */,
 				700BE6EB1D4BDF22004F20D3 /* FlockFlockClientShared.h */,
@@ -73,7 +73,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				700BE6CF1D4BB53C004F20D3 /* FlockFlock.hpp in Headers */,
+				706853A11D500E530097A293 /* FlockFlock.hpp in Headers */,
 				700BE6D31D4BB799004F20D3 /* FlockFlockClient.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -145,8 +145,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				706853A01D500E530097A293 /* FlockFlock.cpp in Sources */,
 				700BE6D21D4BB799004F20D3 /* FlockFlockClient.cpp in Sources */,
-				700BE6CE1D4BB53C004F20D3 /* FlockFlock.cpp in Sources */,
 				7068B77D1D4F9130006511E1 /* mac_policy_hooks.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

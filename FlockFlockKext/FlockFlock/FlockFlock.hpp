@@ -48,7 +48,8 @@ public:
     static int ff_vnode_check_open_static(OSObject *provider, kauth_cred_t cred, struct vnode *vp, struct label *label, int acc_mode);
     int ff_vnode_check_open(kauth_cred_t cred, struct vnode *vp, struct label *label, int acc_mode);
     static int ff_get_agent_pid_static(OSObject *provider);
-    
+    int ff_evaluate_vnode_check_open(kauth_cred_t cred, struct vnode *vp, struct label *label, int acc_mode, struct policy_query *);
+
     /* IOUserClient methods */
     bool startFilter();
     bool stopFilter();
@@ -64,7 +65,7 @@ private:
     bool initQueryContext(mach_query_context *context);
     void destroyQueryContext(mach_query_context *context);
 
-    int sendPolicyQuery(struct policy_query *query, struct mach_query_context *context);
+    int sendPolicyQuery(struct policy_query *query, struct mach_query_context *context, bool lock);
     bool receivePolicyResponse(struct policy_response *response, struct mach_query_context *context);
 
 public:

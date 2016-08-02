@@ -59,6 +59,7 @@ typedef FlockFlockPolicy FlockFlockPolicyHierarchy;
 struct policy_query {
     pid_t pid;
     char path[PATH_MAX];
+    char process_name[PATH_MAX];
     uint32_t security_token;
     uint32_t query_type;
 };
